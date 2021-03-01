@@ -2,7 +2,7 @@
 #Variant 8, f(x)=(x-8)^2, x[-2,20]
 import numpy as np
 def f(x):
-    return (x-2)**2
+    return (x-8)**2
 eps = 1e-7
 delta = 1e-9
 class Dichotomy:
