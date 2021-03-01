@@ -2,34 +2,36 @@
 #Variant 8, f(x)=(x-8)^2, x[-2,20]
 import numpy as np
 def f(x):
-    return (x-8)**2
-
+    return (x-2)**2
+eps = 1e-7
+delta = 1e-9
 class Dichotomy:
     def x01(self,a,b):
-        return (a+b-0.0001)/2
+        return (a+b-delta)/2
 
     def x02(self,a,b):
-        return (a+b+0.0001)/2
+        return (a+b+delta)/2
 
     def DihotomyMethod(self,a,b):
-        i=1
-        while(abs(b-a)> 0.001):
-            print ("i:",i)
-            print("a",a)
-            print("b",b)
-            print("b-a",b-a)
+        i = 0
+        pred = 1
+        x1 = self.x01(a, b)
+        x2 = self.x02(a, b)
+        print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b-a, "\t", pred / b-a,
+              "\t")
+        i = i + 1
+        while(abs(b-a) > eps):
+
             x1 = self.x01(a, b)
-            print ("x1:",x1)
             x2 = self.x02(a, b)
-            print("x2:",x2)
-            print("f(x1):", f(x1))
-            print("f(x2):", f(x2))
+            pred = b-a
             if(f(x1)<f(x2)):
                 b = x2
             else:
-                a=x1
-            i=i+1
-            print("\n")
+                a = x1
+            print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b - a, "\t", pred / b - a,
+                  "\t")
+            i = i + 1
 
 class GoldenRatio:
     def x01(self,a,b):
@@ -38,26 +40,34 @@ class GoldenRatio:
     def x02(self,a,b):
         return a+0.618003399*(b-a)
     def GoldenRatioMethod(self, a,b):
-        i = 1
-        while(abs(b-a)>0.001):
-            print("i:", i)
-            print("a", a)
-            print("b", b)
-            print("b-a", b - a)
+        i = 0
+        pred = 1
+        x1 = self.x01(a, b)
+        x2 = self.x02(a, b)
+        print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b - a, "\t", pred / b - a,
+              "\t")
+        i=i+1
+        while(abs(b-a) > eps):
             x1 = self.x01(a, b)
             x2 = self.x02(a, b)
-            print("x1:", x1)
-            print("x2:", x2)
-            print("f(x1):", f(x1))
-            print("f(x2):", f(x2))
+            pred = b-a
             if(f(x1)<f(x2)):
                 b = x2
                 x2 = x1
             else:
                 a = x1
                 x1 = x2
+            # print("i:", i)
+            # print("a", a)
+            # print("b", b)
+            # print("b-a", b - a)
+            # print("x1:", x1)
+            # print("x2:", x2)
+            # print("f(x1):", f(x1))
+            # print("f(x2):", f(x2))
+            print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b - a, "\t", pred / b - a,
+                  "\t")
             i = i + 1
-            print("\n")
 
 class Fibonachi:
     def x01(self,a,b,n):
@@ -75,13 +85,17 @@ class Fibonachi:
         i = 0
         n=1
         d= (b-a)
-        comp = d/0.001
+        comp = d/eps
+        pred = 1
         while (comp > self.Fib(n+2)):
             n = n+1
         x1 = self.x01(a, b, n)
         x2 = self.x02(a, b, n)
 
+        print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b - a, "\t", pred / b - a,
+              "\t")
         for j in range (n-1):
+            pred = b-a
             if(f(x1)<f(x2)):
                 b = x2
                 x2 = x1
@@ -90,28 +104,44 @@ class Fibonachi:
                 a = x1
                 x1 = x2
                 x2 = self.x02(a,b,n)
-            print("a", a)
-            print("b",b)
-            print("b-a",b-a)
-            print("x1",x1)
-            print("x2",x2)
-            print("f(x1)", f(x1))
-            print("f(x2)", f(x2))
-            print("\n")
+            i=i+1
+            print(i, "\t", x1, "\t", x2, "\t", f(x1), "\t", f(x2), "\t", a, "\t", b, "\t", b - a, "\t", pred / b - a,
+                  "\t")
 
 
+
+def FindMinInterv(x0,d):
+    xpred=0
+    if f(xpred) > f(xpred + d):
+        k = 1
+        xnext = xpred+d
+        h = d
+    else:
+        if f(xpred) > f(xpred - d):
+            xnext = xpred - d
+            h = -d
+    h = h*2
+    print(k, "\t", xpred,"\t", xnext, "\t", f(xpred), "\t", f(xnext))
+    while(f(xpred)>f(xnext)):
+        k = k + 1
+        xpred = xnext
+        h = h * 2
+        xnext = xpred + h
+        print(k, "\t", xpred,"\t", xnext, "\t", f(xpred), "\t", f(xnext))
 
 
 
 a: float = -2
 b: float = 20
-print("Dichotomy method:")
-dichotomy = Dichotomy()
-dichotomy.DihotomyMethod(a,b)
+# print("Dichotomy method:")
+# dichotomy = Dichotomy()
+# dichotomy.DihotomyMethod(a,b)
 
-#goldenRatio = GoldenRatio()
-#goldenRatio.GoldenRatioMethod(a,b)
+# goldenRatio = GoldenRatio()
+# goldenRatio.GoldenRatioMethod(a,b)
 
-#fibonachi = Fibonachi()
-#fibonachi.FibonachiMethod(a,b)
-
+# fibonachi = Fibonachi()
+# fibonachi.FibonachiMethod(a,b)
+x0 = float(input("Enter x0 "))
+d = float(input("Enter delta "))
+FindMinInterv(x0, delta)
